@@ -19,8 +19,29 @@ Also spent some time simplifying the pricing structure because the first version
 
 Main focus today was making the form feel responsive and clean without adding unnecessary complexity yet.
 
-Still need to:
-- connect frontend to backend API
-- build audit engine
-- create results page
-- save reports in DB
+---
+
+## Day 2
+
+Worked on backend setup and project structure.
+
+Completed:
+- setup Express + TypeScript backend
+- connected PostgreSQL with Prisma
+- configured Prisma client
+- created app.ts and server.ts structure
+- added asyncHandler utility
+- created centralized ApiError class
+- created reusable ApiResponse helpers
+- added global error handling middleware
+- started building the audit engine service
+- created initial pricing data structure for supported AI tools
+
+Also fixed multiple TypeScript + Prisma setup issues during configuration.
+
+Next focus:
+- connect frontend with backend audit API
+- complete audit engine logic
+- build results page
+- save audits in database
+- add report sharing flow
