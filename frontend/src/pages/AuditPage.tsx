@@ -11,11 +11,52 @@ export function AuditPage() {
     return () => clearTimeout(timer);
   }, [toast]);
 
-  function handleSubmit(state: AuditFormState): void {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function handleSubmit(state: AuditFormState) {
     if (import.meta.env.DEV) {
       console.log("[AuditPage] Form submitted:", state);
     }
-    setToast("✅ Audit ready — engine coming soon!");
+    
+    setIsSubmitting(true);
+    setToast("🔄 Generating audit...");
+    
+    try {
+      const tools = Object.entries(state.tools).map(([name, entry]) => ({
+        name,
+        enabled: entry.enabled,
+        plan: entry.plan,
+        seats: entry.seats,
+        monthlySpend: entry.monthlySpend
+      }));
+      
+      const payload = {
+        tools,
+        teamSize: state.teamSize,
+        useCase: state.useCase
+      };
+
+      const response = await fetch('/api/v1/audit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      
+      const result = await response.json();
+      
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Failed to generate audit");
+      }
+      
+      console.log("✅ Audit Result:", result.data);
+      setToast("✅ Audit complete! Results logged to console.");
+      
+    } catch (error) {
+      console.error("Audit error:", error);
+      setToast("❌ Error generating audit. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
