@@ -39,9 +39,33 @@ Completed:
 
 Also fixed multiple TypeScript + Prisma setup issues during configuration.
 
+---
+
+## Day 3
+
+Focused mostly on connecting the frontend and backend together and getting the actual audit flow working end-to-end.
+
+Completed:
+- built the main audit engine flow
+- added modular audit rules for different AI tools
+- added savings calculation helpers
+- added alternative recommendation checks
+- separated pricing data from business logic
+- created audit types and shared interfaces
+- created Prisma audit model
+- added audit controller logic
+- created audit routes
+- connected frontend form submission with backend API
+- added database persistence for generated audits
+- added UUID-based audit IDs for report retrieval
+
+Also spent time restructuring parts of the audit engine because the earlier implementation started duplicating pricing values in multiple places.
+
+Main focus today was making the audit flow modular and easier to extend later without turning the backend into unnecessary enterprise-level architecture.
+
 Next focus:
-- connect frontend with backend audit API
-- complete audit engine logic
-- build results page
-- save audits in database
+- build report/results page
+- display recommendations visually
 - add report sharing flow
+- improve audit recommendation quality
+- add AI-generated summaries
