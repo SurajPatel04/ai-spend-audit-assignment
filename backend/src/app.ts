@@ -35,6 +35,10 @@ app.use(
     })
 )
 
+import auditRoutes from "./routes/audit.route.js"
+
+app.use("/api/v1/audit", auditRoutes)
+
 
 app.get('/', (_req: Request, res: Response) => {
     return res.status(200).json({
