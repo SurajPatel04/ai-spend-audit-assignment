@@ -1,9 +1,6 @@
-import { PricingPlan } from '../types/pricing.js'
+import type { PricingPlan } from '../types/pricing.js'
 
-export const pricingData: Record<
-    string,
-    Record<string, PricingPlan>
-> = {
+export const pricingData = {
     cursor: {
         hobby: {
             monthlyPrice: 0,
@@ -331,4 +328,4 @@ export const pricingData: Record<
             verifiedAt: '2026-05-08',
         },
     },
-}
+} satisfies Record<string, Record<string, PricingPlan>>
