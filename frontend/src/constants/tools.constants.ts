@@ -8,7 +8,9 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
     plans: [
       { key: "hobby", label: "Hobby", pricePerSeat: 0 },
       { key: "pro", label: "Pro", pricePerSeat: 20 },
-      { key: "business", label: "Business", pricePerSeat: 40 },
+      { key: "pro_plus", label: "Pro Plus", pricePerSeat: 60 },
+      { key: "ultra", label: "Ultra", pricePerSeat: 200 },
+      { key: "teams", label: "Teams", pricePerSeat: 40 },
       { key: "enterprise", label: "Enterprise", pricePerSeat: null },
     ],
   },
@@ -17,7 +19,9 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
     icon: "🐙",
     description: "AI pair programmer that suggests code inline in your IDE.",
     plans: [
-      { key: "individual", label: "Individual", pricePerSeat: 10 },
+      { key: "free", label: "Free", pricePerSeat: 0 },
+      { key: "pro", label: "Pro", pricePerSeat: 10 },
+      { key: "pro_plus", label: "Pro Plus", pricePerSeat: 39 },
       { key: "business", label: "Business", pricePerSeat: 19 },
       { key: "enterprise", label: "Enterprise", pricePerSeat: 39 },
     ],
@@ -29,8 +33,9 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
     plans: [
       { key: "free", label: "Free", pricePerSeat: 0 },
       { key: "pro", label: "Pro", pricePerSeat: 20 },
-      { key: "max", label: "Max", pricePerSeat: 100 },
-      { key: "team", label: "Team", pricePerSeat: 30 },
+      { key: "max_5x", label: "Max 5x", pricePerSeat: 100 },
+      { key: "max_20x", label: "Max 20x", pricePerSeat: 200 },
+      { key: "team", label: "Team", pricePerSeat: 25 },
       { key: "enterprise", label: "Enterprise", pricePerSeat: null },
       { key: "api", label: "API Direct", pricePerSeat: null },
     ],
@@ -41,8 +46,11 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
     description: "General-purpose AI chatbot for conversation and content generation.",
     plans: [
       { key: "free", label: "Free", pricePerSeat: 0 },
+      { key: "go", label: "Go", pricePerSeat: 8 },
       { key: "plus", label: "Plus", pricePerSeat: 20 },
-      { key: "team", label: "Team", pricePerSeat: 30 },
+      { key: "pro_100", label: "Pro 100", pricePerSeat: 100 },
+      { key: "pro_200", label: "Pro 200", pricePerSeat: 200 },
+      { key: "business", label: "Business", pricePerSeat: 30 },
       { key: "enterprise", label: "Enterprise", pricePerSeat: null },
       { key: "api", label: "API Direct", pricePerSeat: null },
     ],
@@ -52,8 +60,9 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
     icon: "🔌",
     description: "Direct API access to Claude models for custom integrations.",
     plans: [
-      { key: "sonnet", label: "Claude Sonnet ($3/M input, $15/M output)", pricePerSeat: null },
-      { key: "opus", label: "Claude Opus ($15/M input, $75/M output)", pricePerSeat: null },
+      { key: "haiku_45", label: "Claude 3.5 Haiku", pricePerSeat: null },
+      { key: "sonnet_46", label: "Claude 3.5 Sonnet", pricePerSeat: null },
+      { key: "opus_46", label: "Claude 3 Opus", pricePerSeat: null },
     ],
   },
   openaiApi: {
@@ -61,8 +70,9 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
     icon: "🔑",
     description: "Direct API access to GPT models for programmatic usage.",
     plans: [
-      { key: "gpt4o", label: "GPT-4o ($5/M input, $15/M output)", pricePerSeat: null },
-      { key: "gpt4turbo", label: "GPT-4 Turbo ($10/M input, $30/M output)", pricePerSeat: null },
+      { key: "gpt5_mini", label: "GPT-4o mini", pricePerSeat: null },
+      { key: "gpt5", label: "GPT-4o", pricePerSeat: null },
+      { key: "gpt55", label: "o1 / o3-mini", pricePerSeat: null },
     ],
   },
   gemini: {
@@ -70,8 +80,10 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
     icon: "✨",
     description: "Google's multimodal AI model for text, code, and image tasks.",
     plans: [
-      { key: "pro", label: "Gemini Pro", pricePerSeat: 20 },
-      { key: "ultra", label: "Gemini Ultra", pricePerSeat: null },
+      { key: "free", label: "Free", pricePerSeat: 0 },
+      { key: "ai_plus", label: "AI Plus", pricePerSeat: 7.99 },
+      { key: "ai_pro", label: "AI Pro", pricePerSeat: 19.99 },
+      { key: "ai_ultra", label: "AI Ultra", pricePerSeat: 249.99 },
       { key: "api", label: "API Direct", pricePerSeat: null },
     ],
   },
@@ -81,8 +93,10 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
     description: "AI-assisted coding environment with autonomous agent workflows.",
     plans: [
       { key: "free", label: "Free", pricePerSeat: 0 },
-      { key: "pro", label: "Pro", pricePerSeat: 15 },
-      { key: "team", label: "Team", pricePerSeat: 35 },
+      { key: "pro", label: "Pro", pricePerSeat: 20 },
+      { key: "max", label: "Max", pricePerSeat: 200 },
+      { key: "teams", label: "Teams", pricePerSeat: 40 },
+      { key: "enterprise", label: "Enterprise", pricePerSeat: null },
     ],
   },
 };

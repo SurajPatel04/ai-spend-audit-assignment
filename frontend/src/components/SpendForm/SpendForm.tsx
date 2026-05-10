@@ -6,9 +6,10 @@ import { TeamMetaSection } from "./TeamMetaSection";
 
 interface SpendFormProps {
   onSubmit: (state: AuditFormState) => void;
+  isSubmitting?: boolean;
 }
 
-export function SpendForm({ onSubmit }: SpendFormProps) {
+export function SpendForm({ onSubmit, isSubmitting = false }: SpendFormProps) {
   const {
     formState,
     toggleTool,
@@ -93,15 +94,19 @@ export function SpendForm({ onSubmit }: SpendFormProps) {
       <div className="pt-4 pb-8">
         <button
           type="button"
-          disabled={!hasEnabledTools}
+          disabled={!hasEnabledTools || isSubmitting}
           onClick={() => onSubmit(formState)}
           className={`w-full py-3.5 rounded-xl text-sm font-semibold tracking-wide transition-all duration-200 cursor-pointer ${
-            hasEnabledTools
+            hasEnabledTools && !isSubmitting
               ? "bg-green-500 hover:bg-green-400 text-black shadow-lg shadow-green-500/25 hover:shadow-green-400/30 active:scale-[0.99]"
               : "bg-white/[0.06] text-gray-600 cursor-not-allowed"
           }`}
         >
-          {hasEnabledTools ? "Run My Audit →" : "Select at least one tool to continue"}
+          {isSubmitting 
+            ? "Analyzing..." 
+            : hasEnabledTools 
+              ? "Run My Audit →" 
+              : "Select at least one tool to continue"}
         </button>
       </div>
     </div>

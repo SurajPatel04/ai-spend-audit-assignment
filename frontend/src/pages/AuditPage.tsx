@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import type { AuditFormState } from "../types/audit.types";
 import { SpendForm } from "../components/SpendForm";
+import { runAudit, type AuditFormData } from "../services/api";
 
 export function AuditPage() {
+  const navigate = useNavigate();
   const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
@@ -22,38 +25,40 @@ export function AuditPage() {
     setToast("🔄 Generating audit...");
     
     try {
-      const tools = Object.entries(state.tools).map(([name, entry]) => ({
-        name,
-        enabled: entry.enabled,
-        plan: entry.plan,
-        seats: entry.seats,
-        monthlySpend: entry.monthlySpend
-      }));
+      const enabledToolsCount = Object.values(state.tools).filter(t => t.enabled).length;
+      if (enabledToolsCount === 0) {
+        setToast("❌ Please select at least one AI tool");
+        return;
+      }
+
+      const tools = Object.entries(state.tools)
+        .filter(([_, entry]) => entry.enabled)
+        .map(([name, entry]) => ({
+          name,
+          enabled: entry.enabled,
+          plan: entry.plan,
+          seats: entry.seats,
+          monthlySpend: entry.monthlySpend
+        }));
       
-      const payload = {
+      const payload: AuditFormData = {
         tools,
         teamSize: state.teamSize,
         useCase: state.useCase
       };
 
-      const response = await fetch('/api/v1/audit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      const result = await runAudit(payload);
       
-      const result = await response.json();
+      console.log("✅ Audit Result:", result);
+      setToast("✅ Audit complete! Redirecting...");
       
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || "Failed to generate audit");
-      }
-      
-      console.log("✅ Audit Result:", result.data);
-      setToast("✅ Audit complete! Results logged to console.");
+      localStorage.setItem("auditId", result.auditId);
+      localStorage.setItem("auditData", JSON.stringify(result));
+      navigate("/results");
       
     } catch (error) {
       console.error("Audit error:", error);
-      setToast("❌ Error generating audit. Please try again.");
+      setToast("❌ Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -67,7 +72,7 @@ export function AuditPage() {
       </div>
 
       <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <SpendForm onSubmit={handleSubmit} />
+        <SpendForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
       </main>
 
       {toast && (
