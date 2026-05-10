@@ -26,13 +26,14 @@ model Audit {
 }
 
 model Lead {
-  id          String   @id @default(uuid())
-  auditId     String   @unique @map("audit_id")
-  email       String
-  companyName String?  @map("company_name")
-  role        String?
-  teamSize    Int?     @map("team_size")
-  createdAt   DateTime @default(now()) @map("created_at")
+  id                       String   @id @default(uuid())
+  auditId                  String   @unique @map("audit_id")
+  email                    String
+  companyName              String?  @map("company_name")
+  role                     String?
+  teamSize                 Int?     @map("team_size")
+  interestedInConsultation Boolean  @default(false) @map("interested_in_consultation") // ← add this
+  createdAt                DateTime @default(now()) @map("created_at")
 
   audit Audit @relation(fields: [auditId], references: [id])
 

@@ -23,10 +23,16 @@ export const createAudit = asyncHandler(async (req: Request, res: Response) => {
 
     await prisma.audit.create({
         data: {
-            auditId,
-            tools,
-            results: auditOutput.results,
-            totalSavings: auditOutput.totalMonthlySavings,
+            publicToken: auditId,
+            toolsData: tools,
+            auditResult: {
+                results: auditOutput.results,
+                alternatives: auditOutput.alternatives,
+                totalMonthlySavings: auditOutput.totalMonthlySavings,
+                totalAnnualSavings: auditOutput.totalAnnualSavings,
+                savingsLevel: auditOutput.savingsLevel,
+                aiSummary: null,
+            }
         }
     })
 
@@ -40,12 +46,24 @@ export const getAudit = asyncHandler(async (req: Request, res: Response) => {
     const { auditId } = req.params
 
     const audit = await prisma.audit.findUnique({
-        where: { auditId }
+        where: { publicToken: auditId }
     })
 
     if (!audit) {
         throw new ApiError(404, "Audit not found")
     }
 
-    return sendSuccess(res, 200, "Audit retrieved successfully", audit)
+    const auditResult = audit.auditResult as any
+
+    return sendSuccess(res, 200, "Audit retrieved successfully", {
+        auditId: audit.publicToken,
+        tools: audit.toolsData,
+        results: auditResult.results,
+        alternatives: auditResult.alternatives ?? [],
+        totalMonthlySavings: auditResult.totalMonthlySavings,
+        totalAnnualSavings: auditResult.totalAnnualSavings,
+        savingsLevel: auditResult.savingsLevel,
+        aiSummary: auditResult.aiSummary ?? null,
+        createdAt: audit.createdAt,
+    })
 })
