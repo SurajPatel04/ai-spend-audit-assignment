@@ -33,8 +33,9 @@ export interface AuditData {
   totalMonthlySavings: number;
   totalAnnualSavings: number;
   savingsLevel: "high" | "medium" | "low" | "optimal";
-  aiSummary: string | null;
+  aiSummary: AuditSummary | string | null;
   createdAt: string;
+  tools?: any[]; // Added to match what backend might return
 }
 
 export interface LeadData {
@@ -101,4 +102,38 @@ export const saveLead = async (leadData: LeadData): Promise<any> => {
   }
 
   return result.data;
+};
+
+export interface SummaryRequest {
+  auditId: string;
+  totalMonthlySpend: number;
+  totalSavings: number;
+  flaggedTools: string[];
+  useCase: "coding" | "writing" | "data" | "research" | "mixed";
+  teamSize: number;
+}
+
+export interface AuditSummary {
+  summary: string;
+  topRecommendation: string;
+  urgencyLevel: "high" | "medium" | "low" | "optimal";
+}
+
+export const generateAuditSummary = async (auditData: SummaryRequest) => {
+  const res = await fetch(`${API_URL}/api/summary`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(auditData),
+  });
+  
+  if (!res.ok) {
+    throw new Error("Failed to generate audit summary");
+  }
+
+  const result = await res.json();
+  if (!result.success && result.message) {
+    throw new Error(result.message);
+  }
+  
+  return result;
 };

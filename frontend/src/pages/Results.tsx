@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getAudit, saveLead, type AuditData } from "../services/api";
+import { getAudit, saveLead, generateAuditSummary, type AuditData, type AuditSummary } from "../services/api";
 
 const TOOL_ICONS: Record<string, string> = {
   Cursor: "💻",
@@ -50,6 +50,10 @@ export default function Results() {
 
   const [copied, setCopied] = useState(false);
 
+  const [summary, setSummary] = useState<AuditSummary | null>(null);
+  const [summaryLoading, setSummaryLoading] = useState(true);
+  const hasFetchedSummary = React.useRef(false);
+
   // --- FETCH DATA ---
   useEffect(() => {
     const localAuditId = localStorage.getItem("auditId");
@@ -84,7 +88,48 @@ export default function Results() {
     };
 
     fetchAuditData();
-  }, [navigate, urlAuditId, isPublicShare, data]);
+  }, [navigate, urlAuditId, isPublicShare]);
+  
+  useEffect(() => {
+    if (!data || hasFetchedSummary.current) return;
+    hasFetchedSummary.current = true;
+
+    const fetchSummary = async () => {
+      // If audit already has summary saved, use it directly
+      if (data.aiSummary && typeof data.aiSummary !== "string") {
+        setSummary(data.aiSummary as AuditSummary);
+        setSummaryLoading(false);
+        return;
+      }
+
+      try {
+        setSummaryLoading(true);
+        const totalMonthlySpend = data.results?.reduce((acc, r) => acc + r.currentSpend, 0) || 0;
+        const flaggedTools = data.results?.filter(r => r.status !== 'optimal').map(r => r.tool) || [];
+        
+        let teamSize = 1;
+        if (data.tools && Array.isArray(data.tools)) {
+          teamSize = Math.max(...data.tools.map((t: any) => t.seats || 1), 1);
+        }
+
+        const result = await generateAuditSummary({
+          auditId: data.auditId,
+          totalMonthlySpend,
+          totalSavings: data.totalMonthlySavings ?? (data as any).totalSavings ?? 0,
+          flaggedTools,
+          useCase: "mixed",
+          teamSize,
+        });
+        setSummary(result.data);
+      } catch (err) {
+        console.error("Failed to generate summary", err);
+      } finally {
+        setSummaryLoading(false);
+      }
+    };
+
+    fetchSummary();
+  }, [data]);
 
   // --- HANDLERS ---
   const handleLeadSubmit = async (e: React.FormEvent) => {
@@ -257,16 +302,47 @@ export default function Results() {
         )}
 
         {/* 3. AI SUMMARY CARD */}
-        <section className="bg-[#1e293b] border border-slate-700/50 rounded-xl p-6 shadow-md">
+        <section className="bg-[#1e293b] border border-slate-700/50 rounded-xl p-6 shadow-md summary-card">
           <h2 className="text-xl font-bold mb-4 text-white">
             Your Personalized Audit Summary
           </h2>
-          <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">
-            {aiSummary ||
-              `Based on your current AI tool stack, we identified potential savings of $${totalMonthlySavings}/month. Review the recommendations below to optimize your spend.`}
-          </p>
+          
+          {summaryLoading ? (
+            <p className="text-gray-400 animate-pulse">
+              Generating your personalized summary...
+            </p>
+          ) : (
+            <div className="space-y-4">
+              <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">
+                {summary?.summary || (typeof aiSummary === "string" ? aiSummary : undefined) || `Based on your current AI tool stack, we identified potential savings of $${totalMonthlySavings}/month. Review the recommendations below to optimize your spend.`}
+              </p>
+              
+              {summary?.topRecommendation && (
+                <p className="top-rec text-blue-300 font-medium bg-blue-900/20 p-3 rounded-lg border border-blue-500/20">
+                  ⚡ {summary.topRecommendation}
+                </p>
+              )}
+              
+              {summary?.urgencyLevel && (
+                <div className="mt-4">
+                  <span 
+                    className={`badge inline-block px-3 py-1 rounded-full text-sm font-semibold border ${
+                      summary.urgencyLevel === "high" 
+                        ? "bg-red-900/50 text-red-400 border-red-500/30" 
+                        : summary.urgencyLevel === "medium" 
+                        ? "bg-yellow-900/50 text-yellow-400 border-yellow-500/30" 
+                        : "bg-green-900/50 text-green-400 border-green-500/30"
+                    }`}
+                  >
+                    {summary.urgencyLevel === "high" ? "🔴 Act Now" 
+                      : summary.urgencyLevel === "medium" ? "🟡 Review Soon" 
+                      : "🟢 Looks Good"}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
         </section>
-
         {/* 5. PER-TOOL BREAKDOWN */}
         {!isOptimal && results.length > 0 && (
           <section className="space-y-4">

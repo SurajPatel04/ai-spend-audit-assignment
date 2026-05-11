@@ -133,10 +133,44 @@ Keeping the API response shape consistent between createAudit and getAudit matte
 **Blockers / what I'm stuck on:**
 Resend from address requires domain verification for production. Currently using onboarding@resend.dev for development which only delivers to the account owner email. Will note this limitation in ARCHITECTURE.md.
 
+## Day 5 — 2026-05-11
+
+**Hours worked:** 5
+
+**What I did:**
+
+Backend:
+- added AI-generated audit summary feature using LangChain + Gemini (gemini-2.5-flash)
+- created summarySchema.ts with Zod structured output (summary, topRecommendation, urgencyLevel)
+- created summaryService.ts with graceful fallback if Gemini API fails
+- created summaryController.ts with DB caching — skips Gemini call if summary already exists
+- added aiSummary field to Prisma audit model and ran db push + generate
+- created summaryRoutes.ts and registered /api/summary in app.ts
+- added rate limiting middleware with three tiers:
+  - strict (5 req/15min) on /api/leads and /api/summary
+  - moderate (10 req/15min) on POST /api/audit
+  - loose (60 req/15min) on GET /api/audit/:auditId
+
+Frontend:
+- updated Results.tsx to fetch AI summary on page load with loading state
+- added urgencyLevel badge (high/medium/low) on summary card
+- updated api.ts with generateAuditSummary function
+- added Open Graph and Twitter Card meta tags to index.html
+- installed react-helmet-async for dynamic OG tags on /audit/:auditId pages
+
+**What I learned:**
+Caching the AI summary in the DB was important — without it, every page visit would trigger a Gemini API call, adding latency and cost. Checking for existing aiSummary before calling the LLM keeps the experience fast on repeat visits and shared URLs.
+
+Also learned that LangChain's withStructuredOutput + Zod is cleaner than parsing raw LLM text — the frontend always gets a guaranteed shape with no defensive coding needed.
+
+**Blockers / what I'm stuck on:**
+OG meta tags in a Vite + React SPA are not crawlable by social platforms since crawlers don't execute JavaScript. Documented this limitation — proper fix would require SSR (Next.js). Used react-helmet-async as a best-effort solution for now.
+
 **Plan for tomorrow:**
-- Add Anthropic API for AI-generated audit summary
-- Add rate limiting with express-rate-limit
+- Write 5+ audit engine tests with Jest/Vitest
+- Set up GitHub Actions CI (lint + test on every push to main)
 - Deploy backend to Render
 - Deploy frontend to Netlify
-- Test full flow on live deployed URLs
-- Fix any CORS issues between deployed frontend and backend
+- Fix CORS between deployed URLs
+- Conduct user interviews (target: 3 real conversations)
+- Start PRICING_DATA.md, ARCHITECTURE.md
