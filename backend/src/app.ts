@@ -35,11 +35,13 @@ app.use(
     })
 )
 
-import auditRoutes from "./routes/audit.route.js"
-import leadRouter from "./routes/lead.route.js"
+import auditRoutes from "./routes/audit.route.js";
+import leadRouter from "./routes/lead.route.js";
+import summaryRoutes from "./routes/summaryRoutes.js";
 
-app.use("/api/v1/audit", auditRoutes)
-app.use("/api/v1/lead", leadRouter)
+app.use("/api/v1/audit", auditRoutes);
+app.use("/api/v1/lead", leadRouter);
+app.use("/api/summary", summaryRoutes);
 
 
 app.get('/', (_req: Request, res: Response) => {

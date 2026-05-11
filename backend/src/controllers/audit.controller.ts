@@ -4,7 +4,7 @@ import { runAudit } from "../services/auditEngine.js"
 import prisma from "../config/db.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/apiError.js"
-import { sendSuccess } from "../utils/apiResponse.js"
+import { ApiResponse } from "../utils/apiResponse.js"
 
 export const createAudit = asyncHandler(async (req: Request, res: Response) => {
     const { tools, teamSize, useCase } = req.body
@@ -36,10 +36,9 @@ export const createAudit = asyncHandler(async (req: Request, res: Response) => {
         }
     })
 
-    return sendSuccess(res, 201, "Audit created successfully", {
-        auditId,
-        ...auditOutput
-    })
+    return res.status(201).json(
+        new ApiResponse(201, { auditId, ...auditOutput }, "Audit created successfully")
+    )
 })
 
 export const getAudit = asyncHandler(async (req: Request, res: Response) => {
@@ -55,15 +54,17 @@ export const getAudit = asyncHandler(async (req: Request, res: Response) => {
 
     const auditResult = audit.auditResult as any
 
-    return sendSuccess(res, 200, "Audit retrieved successfully", {
-        auditId: audit.publicToken,
-        tools: audit.toolsData,
-        results: auditResult.results,
-        alternatives: auditResult.alternatives ?? [],
-        totalMonthlySavings: auditResult.totalMonthlySavings,
-        totalAnnualSavings: auditResult.totalAnnualSavings,
-        savingsLevel: auditResult.savingsLevel,
-        aiSummary: auditResult.aiSummary ?? null,
-        createdAt: audit.createdAt,
-    })
+    return res.status(200).json(
+        new ApiResponse(200, {
+            auditId: audit.publicToken,
+            tools: audit.toolsData,
+            results: auditResult.results,
+            alternatives: auditResult.alternatives ?? [],
+            totalMonthlySavings: auditResult.totalMonthlySavings,
+            totalAnnualSavings: auditResult.totalAnnualSavings,
+            savingsLevel: auditResult.savingsLevel,
+            aiSummary: audit.aiSummary ?? auditResult.aiSummary ?? null,
+            createdAt: audit.createdAt,
+        }, "Audit retrieved successfully")
+    )
 })

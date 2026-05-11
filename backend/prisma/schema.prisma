@@ -18,6 +18,7 @@ model Audit {
   publicToken String   @unique @default(uuid()) @map("public_token")
   toolsData   Json     @map("tools_data")
   auditResult Json     @map("audit_result")
+  aiSummary        Json?
   createdAt   DateTime @default(now()) @map("created_at")
 
   lead Lead?

@@ -3,7 +3,7 @@ import type { Request, Response } from "express"
 import prisma from "../config/db.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/apiError.js"
-import { sendSuccess } from "../utils/apiResponse.js"
+import { ApiResponse } from "../utils/apiResponse.js"
 import { sendAuditEmail } from "../services/emailService.js"
 
 export const createLead = asyncHandler(async (req: Request, res: Response) => {
@@ -46,5 +46,5 @@ export const createLead = asyncHandler(async (req: Request, res: Response) => {
         console.error('Email failed:', emailError)
     }
 
-    return sendSuccess(res, 201, "Lead captured successfully", { lead })
+    return res.status(201).json(new ApiResponse(201, { lead }, "Lead captured successfully"))
 })
