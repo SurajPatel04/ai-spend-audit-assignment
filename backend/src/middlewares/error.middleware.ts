@@ -15,9 +15,9 @@ interface ErrorResponse {
 
 export const errorMiddleware = (
     err: Error | ApiError,
-    req: Request,
+    _req: Request,
     res: Response,
-    next: NextFunction
+    _next: NextFunction
 ): Response<ErrorResponse> => {
     const statusCode =
         err instanceof ApiError
@@ -35,7 +35,7 @@ export const errorMiddleware = (
         response.errors = err.errors
     }
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env["NODE_ENV"] === 'development' && err.stack !== undefined) {
         response.stack = err.stack
     }
 

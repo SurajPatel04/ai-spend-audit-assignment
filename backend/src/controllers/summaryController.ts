@@ -11,7 +11,14 @@ import prisma from "../config/db.js";
 export const getSummary = asyncHandler(async (req: Request, res: Response) => {
     const parsed = SummaryRequestSchema.safeParse(req.body);
     if (!parsed.success) {
-        throw new ApiError(400, "Invalid request data", parsed.error.errors);
+        throw new ApiError(
+            400,
+            "Invalid request data",
+            parsed.error.issues.map(i => ({
+                field: i.path.join("."),
+                message: i.message
+            }))
+        );
     }
 
     const { auditId } = parsed.data;

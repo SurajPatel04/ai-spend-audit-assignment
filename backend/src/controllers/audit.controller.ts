@@ -1,4 +1,5 @@
 import type { Request, Response } from "express"
+import { Prisma } from "@prisma/client"
 import { v4 as uuidv4 } from "uuid"
 import { runAudit } from "../services/auditEngine.js"
 import prisma from "../config/db.js"
@@ -32,7 +33,7 @@ export const createAudit = asyncHandler(async (req: Request, res: Response) => {
                 totalAnnualSavings: auditOutput.totalAnnualSavings,
                 savingsLevel: auditOutput.savingsLevel,
                 aiSummary: null,
-            }
+            } as unknown as Prisma.InputJsonValue
         }
     })
 
@@ -42,7 +43,12 @@ export const createAudit = asyncHandler(async (req: Request, res: Response) => {
 })
 
 export const getAudit = asyncHandler(async (req: Request, res: Response) => {
-    const { auditId } = req.params
+    const raw = req.params["auditId"];
+    const auditId = Array.isArray(raw) ? raw[0] : raw;
+
+    if (!auditId) {
+        throw new ApiError(400, "auditId is required")
+    }
 
     const audit = await prisma.audit.findUnique({
         where: { publicToken: auditId }

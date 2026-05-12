@@ -1,7 +1,7 @@
 import { Resend } from 'resend'
 import type { SendAuditEmailParams } from '../types/email.js'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env["RESEND_API_KEY"])
 
 export const sendAuditEmail = async ({
     email,
@@ -12,7 +12,7 @@ export const sendAuditEmail = async ({
     savingsLevel,
 }: SendAuditEmailParams) => {
 
-    const reportUrl = `${process.env.FRONTEND_URL}/audit/${auditId}`
+    const reportUrl = `${process.env["FRONTEND_URL"]}/audit/${auditId}`
 
     // build per-tool recommendations list
     const recommendationRows = results

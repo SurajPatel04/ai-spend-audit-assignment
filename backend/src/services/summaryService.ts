@@ -7,7 +7,7 @@ import {
 
 const model = new ChatGoogleGenerativeAI({
     model: "gemini-2.5-flash",
-    apiKey: process.env.GEMINI_API_KEY!,
+    apiKey: process.env["GEMINI_API_KEY"]!,
 }).withStructuredOutput(AuditSummarySchema);
 
 const buildPrompt = (data: SummaryRequest): string => `

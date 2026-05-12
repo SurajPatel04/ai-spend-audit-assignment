@@ -7,3 +7,10 @@ node_modules
 /src/generated/prisma
 
 /src/generated/prisma
+
+
+# Root-level compiled config artifacts
+*.config.js
+*.config.js.map
+*.config.d.ts
+*.config.d.ts.map

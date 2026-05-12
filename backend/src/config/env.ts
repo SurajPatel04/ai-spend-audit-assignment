@@ -11,7 +11,7 @@ for (const varName of requiredEnvVars) {
 }
 
 export const env = {
-    port: Number(process.env.PORT) || 8000,
-    db_url: process.env.DATABASE_URL,
-    nodeEnv: process.env.NODE_ENV || "development"
+    port: Number(process.env["PORT"]) || 8000,
+    db_url: process.env["DATABASE_URL"],
+    nodeEnv: process.env["NODE_ENV"] ?? "development"
 }

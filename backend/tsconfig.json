@@ -1,44 +1,54 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    // File Layout
-    // "rootDir": "./src",
-    // "outDir": "./dist",
-
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
-    "types": [],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
-
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
-
-    // Recommended Options
-    "strict": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true,
-  }
+    // ── File Layout ──────────────────────────────────────────────
+    "rootDir": "./src", // All source .ts files must be under ./src
+    "outDir": "./dist", // Compiled output goes to ./dist
+    // ── Environment ──────────────────────────────────────────────
+    "module": "nodenext", // Use Node's native ESM/CJS resolution
+    "moduleResolution": "nodenext", // Match module resolution to nodenext
+    "target": "es2022", // Node 18+ supports es2022 natively
+    "lib": [
+      "es2022"
+    ], // Type definitions for built-in JS APIs
+    "types": [
+      "node"
+    ], // Pull in @types/node globals (process, __dirname, etc.)
+    // Run: npm install -D @types/node
+    // ── Output Files ─────────────────────────────────────────────
+    "sourceMap": true, // Generates .js.map for debuggers
+    "declaration": true, // Generates .d.ts type declaration files
+    "declarationMap": true, // Generates .d.ts.map for go-to-definition
+    // ── Strict Type Checking ─────────────────────────────────────
+    "strict": true, // Enables all strict checks below:
+    //   strictNullChecks, strictFunctionTypes,
+    //   strictBindCallApply, noImplicitAny, etc.
+    "noUncheckedIndexedAccess": true, // arr[0] is T | undefined, not T
+    "exactOptionalPropertyTypes": true, // { a?: string } won't accept { a: undefined }
+    "noImplicitReturns": true, // All code paths must return a value
+    "noImplicitOverride": true, // Must use `override` keyword explicitly
+    "noUnusedLocals": true, // Error on unused local variables
+    "noUnusedParameters": true, // Error on unused function parameters
+    "noFallthroughCasesInSwitch": true, // switch cases must break/return
+    "noPropertyAccessFromIndexSignature": true, // Use bracket notation for index sigs
+    // ── Module Interop ────────────────────────────────────────────
+    "esModuleInterop": true, // Allows `import express from 'express'`
+    "allowSyntheticDefaultImports": true, // Allow default imports from CJS modules
+    "verbatimModuleSyntax": true, // Enforces `import type` for type-only imports
+    "resolveJsonModule": true, // Allows `import data from './data.json'`
+    // ── Performance / Safety ──────────────────────────────────────
+    "isolatedModules": true, // Each file must be independently transpilable (esbuild/swc safe)
+    "moduleDetection": "force", // Treat all files as modules (no accidental global scripts)
+    "noUncheckedSideEffectImports": true, // Warn on imports with only side effects
+    "skipLibCheck": true, // Skip type-checking .d.ts files in node_modules (faster builds)
+    "forceConsistentCasingInFileNames": true // Prevents casing bugs on case-insensitive OSes
+  },
+  "include": [
+    "src/**/*"
+  ], // Only compile files inside ./src
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
 }
