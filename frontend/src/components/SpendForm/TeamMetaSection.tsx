@@ -22,8 +22,8 @@ export function TeamMetaSection({
   onUseCaseChange,
 }: TeamMetaSectionProps) {
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6 space-y-6">
-      <h2 className="text-base font-semibold text-white flex items-center gap-2">
+    <div className="rounded-xl border border-wheat-200 bg-white/60 p-6 space-y-6">
+      <h2 className="text-base font-semibold text-stone-900 flex items-center gap-2">
         <span className="text-lg">👥</span>
         Team Details
       </h2>
@@ -31,7 +31,7 @@ export function TeamMetaSection({
       <div>
         <label
           htmlFor="team-size"
-          className="block text-xs font-medium text-gray-300 mb-1.5"
+          className="block text-xs font-medium text-stone-600 mb-1.5"
         >
           Total team size (all roles)
         </label>
@@ -44,14 +44,14 @@ export function TeamMetaSection({
             const val = Math.max(1, parseInt(e.target.value, 10) || 1);
             onTeamSizeChange(val);
           }}
-          className="w-full max-w-[200px] bg-white/[0.06] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-green-400/40 transition-colors"
+          className="w-full max-w-[200px] bg-wheat-50 border border-wheat-200 rounded-lg px-3 py-2 text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-wheat-400/40 transition-colors"
         />
       </div>
 
       <div>
         <label
           htmlFor="use-case-group"
-          className="block text-xs font-medium text-gray-300 mb-2.5"
+          className="block text-xs font-medium text-stone-600 mb-2.5"
         >
           Primary use case
         </label>
@@ -67,8 +67,8 @@ export function TeamMetaSection({
                 onClick={() => onUseCaseChange(opt.value)}
                 className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer border ${
                   isSelected
-                    ? "bg-green-500/15 border-green-500/40 text-green-400 shadow-sm shadow-green-500/10"
-                    : "bg-white/[0.04] border-white/[0.08] text-gray-400 hover:bg-white/[0.08] hover:text-gray-300"
+                    ? "bg-wheat-100 border-wheat-400 text-wheat-800 shadow-sm shadow-wheat-400/20"
+                    : "bg-wheat-50/50 border-wheat-200 text-stone-500 hover:bg-wheat-100 hover:text-stone-700"
                 }`}
               >
                 <span>{opt.icon}</span>

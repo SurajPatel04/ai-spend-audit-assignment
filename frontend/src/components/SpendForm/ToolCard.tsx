@@ -43,8 +43,8 @@ export function ToolCard({ toolId, config, entry, onToggle, onFieldChange }: Too
     <div
       className={`relative rounded-xl border transition-all duration-300 ease-in-out overflow-hidden ${
         entry.enabled
-          ? "border-white/10 bg-white/[0.04] shadow-lg shadow-black/20"
-          : "border-white/[0.06] bg-white/[0.02] opacity-60 hover:opacity-80"
+          ? "border-wheat-300 bg-white shadow-md shadow-wheat-400/10"
+          : "border-wheat-200 bg-wheat-50/50 opacity-70 hover:opacity-100 hover:bg-white"
       }`}
       style={{ borderLeftWidth: "3px", borderLeftColor: entry.enabled ? accentColor : "transparent" }}
     >
@@ -58,12 +58,10 @@ export function ToolCard({ toolId, config, entry, onToggle, onFieldChange }: Too
         onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onToggle(); } }}
       >
         <div className="flex items-center gap-3 min-w-0">
-          <span className="text-2xl flex-shrink-0" role="img" aria-label={config.label}>
-            {config.icon}
-          </span>
+          <img src={config.icon} alt={config.label} className="w-8 h-8 object-contain flex-shrink-0" />
           <div className="min-w-0">
-            <h3 className="text-sm font-semibold text-white truncate">{config.label}</h3>
-            <p className="text-xs text-gray-400 truncate">{config.description}</p>
+            <h3 className="text-sm font-semibold text-stone-900 truncate">{config.label}</h3>
+            <p className="text-xs text-stone-500 truncate">{config.description}</p>
           </div>
         </div>
 
@@ -81,8 +79,8 @@ export function ToolCard({ toolId, config, entry, onToggle, onFieldChange }: Too
             aria-label={`Enable ${config.label}`}
           />
           <div
-            className={`w-10 h-5 rounded-full transition-colors duration-200 peer-focus-visible:ring-2 peer-focus-visible:ring-green-400/50 ${
-              entry.enabled ? "bg-green-500" : "bg-white/10"
+            className={`w-10 h-5 rounded-full transition-colors duration-200 peer-focus-visible:ring-2 peer-focus-visible:ring-wheat-400/50 ${
+              entry.enabled ? "bg-wheat-500" : "bg-wheat-300"
             }`}
           >
             <div
@@ -100,10 +98,10 @@ export function ToolCard({ toolId, config, entry, onToggle, onFieldChange }: Too
         }`}
       >
         <div className="overflow-hidden">
-          <div className="px-5 pb-5 pt-1 space-y-4 border-t border-white/[0.06]">
+          <div className="px-5 pb-5 pt-1 space-y-4 border-t border-wheat-200">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <label htmlFor={`plan-${toolId}`} className="text-xs font-medium text-gray-300">
+                <label htmlFor={`plan-${toolId}`} className="text-xs font-medium text-stone-600">
                   Plan
                 </label>
                 <span
@@ -120,10 +118,10 @@ export function ToolCard({ toolId, config, entry, onToggle, onFieldChange }: Too
                 id={`plan-${toolId}`}
                 value={entry.plan}
                 onChange={(e) => onFieldChange("plan", e.target.value)}
-                className="w-full bg-white/[0.06] border border-white/10 rounded-lg px-3 py-2 text-sm text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-400/40 transition-colors"
+                className="w-full bg-white border border-wheat-300 rounded-lg px-3 py-2 text-sm text-stone-900 appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-wheat-400/40 transition-colors"
               >
                 {config.plans.map((p) => (
-                  <option key={p.key} value={p.key} className="bg-gray-900 text-white">
+                  <option key={p.key} value={p.key} className="bg-wheat-50 text-stone-900">
                     {p.label}
                     {p.pricePerSeat !== null ? ` — $${p.pricePerSeat}/seat` : " — Custom pricing"}
                   </option>
@@ -133,7 +131,7 @@ export function ToolCard({ toolId, config, entry, onToggle, onFieldChange }: Too
 
             {!isApiPlan && (
               <div>
-                <label htmlFor={`seats-${toolId}`} className="block text-xs font-medium text-gray-300 mb-1.5">
+                <label htmlFor={`seats-${toolId}`} className="block text-xs font-medium text-stone-600 mb-1.5">
                   Seats / Users
                 </label>
                 <input
@@ -146,17 +144,17 @@ export function ToolCard({ toolId, config, entry, onToggle, onFieldChange }: Too
                     const val = Math.max(1, Math.min(10000, parseInt(e.target.value, 10) || 1));
                     onFieldChange("seats", val);
                   }}
-                  className="w-full bg-white/[0.06] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-green-400/40 transition-colors"
+                  className="w-full bg-white border border-wheat-300 rounded-lg px-3 py-2 text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-wheat-400/40 transition-colors"
                 />
               </div>
             )}
 
             <div>
-              <label htmlFor={`spend-${toolId}`} className="block text-xs font-medium text-gray-300 mb-1.5">
+              <label htmlFor={`spend-${toolId}`} className="block text-xs font-medium text-stone-600 mb-1.5">
                 Monthly Spend
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 pointer-events-none">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-stone-400 pointer-events-none">
                   $
                 </span>
                 <input
@@ -168,18 +166,18 @@ export function ToolCard({ toolId, config, entry, onToggle, onFieldChange }: Too
                     const val = Math.max(0, parseFloat(e.target.value) || 0);
                     onFieldChange("monthlySpend", val);
                   }}
-                  className="w-full bg-white/[0.06] border border-white/10 rounded-lg pl-7 pr-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-green-400/40 transition-colors"
+                  className="w-full bg-white border border-wheat-300 rounded-lg pl-7 pr-3 py-2 text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-wheat-400/40 transition-colors"
                 />
               </div>
 
               {estimatedSpend !== null && (
-                <p className="text-xs text-gray-500 mt-1.5">
-                  Estimated: <span className="text-gray-400">${estimatedSpend.toLocaleString()}/mo</span>
+                <p className="text-xs text-stone-500 mt-1.5">
+                  Estimated: <span className="text-stone-400">${estimatedSpend.toLocaleString()}/mo</span>
                 </p>
               )}
 
               {showSpendWarning && (
-                <p className="flex items-center gap-1.5 text-xs text-amber-400 mt-1.5">
+                <p className="flex items-center gap-1.5 text-xs text-orange-500 mt-1.5">
                   <span>⚠</span>
                   Differs from plan pricing — double-check
                 </p>

@@ -1,1 +1,20 @@
 @import "tailwindcss";
+
+@theme {
+  --color-wheat-50: #fdfbf7;
+  --color-wheat-100: #f7f1e3;
+  --color-wheat-200: #eedeba;
+  --color-wheat-300: #e4c68e;
+  --color-wheat-400: #dbaf65;
+  --color-wheat-500: #d09440;
+  --color-wheat-600: #c17c34;
+  --color-wheat-700: #a1602e;
+  --color-wheat-800: #834d2a;
+  --color-wheat-900: #6a3f24;
+}
+
+@layer base {
+  body {
+    @apply bg-wheat-50 text-stone-800 antialiased font-sans;
+  }
+}

@@ -2,19 +2,32 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAudit, saveLead, generateAuditSummary, type AuditData, type AuditSummary } from "../services/api";
 
+import cursorImg from "../assets/new-cursor.webp";
+import copilotImg from "../assets/github-copilot.webp";
+import claudeImg from "../assets/Claude_AI_symbol.svg.png";
+import chatgptImg from "../assets/ChatGPT-Logo.png";
+import anthropicApiImg from "../assets/anthropic-icon-.webp";
+import geminiImg from "../assets/Google-Gemini.png";
+import windsurfImg from "../assets/Windsurf.png";
+
 const TOOL_ICONS: Record<string, string> = {
-  Cursor: "💻",
-  Claude: "🤖",
-  ChatGPT: "💬",
-  "GitHub Copilot": "🐙",
-  "Anthropic API": "⚡",
-  "OpenAI API": "🔮",
-  Gemini: "♊",
-  Windsurf: "🏄",
+  Cursor: cursorImg,
+  "Claude (Anthropic)": claudeImg,
+  "ChatGPT (OpenAI)": chatgptImg,
+  "GitHub Copilot": copilotImg,
+  "Anthropic API (Direct)": anthropicApiImg,
+  "OpenAI API (Direct)": chatgptImg,
+  "Gemini (Google)": geminiImg,
+  Windsurf: windsurfImg,
+  Claude: claudeImg,
+  ChatGPT: chatgptImg,
+  "Anthropic API": anthropicApiImg,
+  "OpenAI API": chatgptImg,
+  Gemini: geminiImg,
 };
 
 const getToolIcon = (toolName: string) => {
-  return TOOL_ICONS[toolName] || "🔧";
+  return TOOL_ICONS[toolName] || "";
 };
 
 export default function Results() {
@@ -166,8 +179,8 @@ export default function Results() {
   // --- RENDERERS ---
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0f172a] flex flex-col items-center justify-center text-white">
-        <div className="w-12 h-12 border-4 border-slate-700 border-t-blue-500 rounded-full animate-spin mb-4"></div>
+      <div className="min-h-screen bg-wheat-50 flex flex-col items-center justify-center text-stone-900">
+        <div className="w-12 h-12 border-4 border-wheat-200 border-t-wheat-600 rounded-full animate-spin mb-4"></div>
         <p className="text-xl">Analyzing your AI spend...</p>
       </div>
     );
@@ -175,11 +188,11 @@ export default function Results() {
 
   if (error || !data) {
     return (
-      <div className="min-h-screen bg-[#0f172a] flex flex-col items-center justify-center text-white p-6 text-center">
-        <h2 className="text-2xl font-bold mb-4">
+      <div className="min-h-screen bg-wheat-50 flex flex-col items-center justify-center text-stone-900 p-6 text-center">
+        <h2 className="text-2xl font-bold mb-4 text-stone-900">
           {error === "Audit not found" ? "Audit not found" : "Oops, something went wrong"}
         </h2>
-        <p className="text-slate-400 mb-6">{error}</p>
+        <p className="text-stone-500 mb-6">{error}</p>
         <button
           onClick={() => {
             if (error === "Audit not found" || isPublicShare) {
@@ -188,7 +201,7 @@ export default function Results() {
               window.location.reload();
             }
           }}
-          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 transition rounded-lg font-medium"
+          className="px-6 py-3 bg-wheat-600 text-white hover:bg-wheat-700 transition rounded-lg font-medium"
         >
           {error === "Audit not found" || isPublicShare ? "Go to Homepage" : "Try Again"}
         </button>
@@ -206,17 +219,17 @@ export default function Results() {
   const isOptimal = totalMonthlySavings < 100 && savingsLevel === "optimal";
 
   // Determine Hero Colors
-  let heroBg = "bg-blue-900/50 border-blue-500/30";
-  let heroText = "text-blue-400";
+  let heroBg = "bg-wheat-100 border-wheat-300";
+  let heroText = "text-wheat-900";
   if (savingsLevel === "high" || totalMonthlySavings > 500) {
-    heroBg = "bg-green-900/50 border-green-500/30";
-    heroText = "text-green-400";
+    heroBg = "bg-emerald-50 border-emerald-200";
+    heroText = "text-emerald-800";
   } else if (savingsLevel === "medium") {
-    heroBg = "bg-amber-900/50 border-amber-500/30";
-    heroText = "text-amber-400";
+    heroBg = "bg-amber-50 border-amber-200";
+    heroText = "text-amber-800";
   } else if (savingsLevel === "optimal") {
-    heroBg = "bg-purple-900/50 border-purple-500/30";
-    heroText = "text-purple-400";
+    heroBg = "bg-purple-50 border-purple-200";
+    heroText = "text-purple-800";
   }
 
   // Lead capture title
@@ -228,13 +241,13 @@ export default function Results() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f172a] text-slate-100 font-sans pb-20">
+    <div className="min-h-screen bg-wheat-50 text-stone-800 font-sans pb-20">
       {/* Header */}
       <header className="p-6 flex justify-between items-center max-w-4xl mx-auto">
         {!isPublicShare ? (
           <button
             onClick={() => navigate("/")}
-            className="text-slate-400 hover:text-white transition flex items-center gap-2"
+            className="text-stone-500 hover:text-stone-900 transition flex items-center gap-2 font-medium"
             aria-label="Run Another Audit"
           >
             ← Run Another Audit
@@ -242,7 +255,7 @@ export default function Results() {
         ) : (
           <button
             onClick={() => navigate("/")}
-            className="text-blue-400 hover:text-blue-300 font-semibold transition flex items-center gap-2"
+            className="text-wheat-700 hover:text-wheat-900 font-semibold transition flex items-center gap-2"
             aria-label="Run your own audit"
           >
             Run your own audit →
@@ -253,14 +266,14 @@ export default function Results() {
       <main className="max-w-4xl mx-auto px-6 space-y-8">
         {/* 2. HERO SECTION */}
         <section
-          className={`p-8 md:p-12 rounded-2xl border ${heroBg} text-center shadow-lg`}
+          className={`p-8 md:p-12 rounded-2xl border ${heroBg} text-center shadow-sm`}
         >
           {isOptimal ? (
             <>
               <h1 className={`text-4xl md:text-5xl font-extrabold mb-4 ${heroText}`}>
                 You're spending well.
               </h1>
-              <p className="text-xl text-slate-300">
+              <p className="text-xl text-stone-600">
                 No major optimizations found. Your AI stack looks well optimized.
               </p>
             </>
@@ -269,7 +282,7 @@ export default function Results() {
               <h1 className={`text-4xl md:text-5xl font-extrabold mb-4 ${heroText}`}>
                 You could save ${totalMonthlySavings.toLocaleString()}/month
               </h1>
-              <p className="text-xl text-slate-300">
+              <p className="text-xl text-stone-600">
                 ${totalAnnualSavings.toLocaleString()} saved annually — that's $
                 {totalAnnualSavings.toLocaleString()}/year back in your budget
               </p>
@@ -279,12 +292,12 @@ export default function Results() {
 
         {/* 4. CREDEX CTA BANNER */}
         {!isOptimal && totalMonthlySavings > 500 && (
-          <section className="bg-emerald-900 border border-emerald-500/50 rounded-xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+          <section className="bg-wheat-800 border border-wheat-900 rounded-xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md">
             <div className="text-center md:text-left">
               <h2 className="text-2xl font-bold text-white mb-2">
                 You're leaving ${totalMonthlySavings.toLocaleString()}/month on the table
               </h2>
-              <p className="text-emerald-100 text-sm md:text-base">
+              <p className="text-wheat-100 text-sm md:text-base">
                 Credex offers discounted AI credits for Cursor, Claude, and ChatGPT
                 Enterprise. Teams saving this much typically recover costs within the
                 first month.
@@ -294,7 +307,7 @@ export default function Results() {
               href="https://credex.rocks"
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 bg-white text-emerald-900 font-bold px-6 py-3 rounded-lg hover:bg-emerald-50 transition"
+              className="shrink-0 bg-white text-wheat-900 font-bold px-6 py-3 rounded-lg hover:bg-wheat-50 transition"
             >
               Book a Free Credex Consultation →
             </a>
@@ -302,23 +315,23 @@ export default function Results() {
         )}
 
         {/* 3. AI SUMMARY CARD */}
-        <section className="bg-[#1e293b] border border-slate-700/50 rounded-xl p-6 shadow-md summary-card">
-          <h2 className="text-xl font-bold mb-4 text-white">
+        <section className="bg-white border border-wheat-200 rounded-xl p-6 shadow-sm summary-card">
+          <h2 className="text-xl font-bold mb-4 text-stone-900">
             Your Personalized Audit Summary
           </h2>
           
           {summaryLoading ? (
-            <p className="text-gray-400 animate-pulse">
+            <p className="text-stone-500 animate-pulse">
               Generating your personalized summary...
             </p>
           ) : (
             <div className="space-y-4">
-              <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">
+              <p className="text-stone-700 leading-relaxed whitespace-pre-wrap">
                 {summary?.summary || (typeof aiSummary === "string" ? aiSummary : undefined) || `Based on your current AI tool stack, we identified potential savings of $${totalMonthlySavings}/month. Review the recommendations below to optimize your spend.`}
               </p>
               
               {summary?.topRecommendation && (
-                <p className="top-rec text-blue-300 font-medium bg-blue-900/20 p-3 rounded-lg border border-blue-500/20">
+                <p className="top-rec text-wheat-800 font-medium bg-wheat-100/50 p-3 rounded-lg border border-wheat-300">
                   ⚡ {summary.topRecommendation}
                 </p>
               )}
@@ -328,10 +341,10 @@ export default function Results() {
                   <span 
                     className={`badge inline-block px-3 py-1 rounded-full text-sm font-semibold border ${
                       summary.urgencyLevel === "high" 
-                        ? "bg-red-900/50 text-red-400 border-red-500/30" 
+                        ? "bg-red-50 text-red-700 border-red-200" 
                         : summary.urgencyLevel === "medium" 
-                        ? "bg-yellow-900/50 text-yellow-400 border-yellow-500/30" 
-                        : "bg-green-900/50 text-green-400 border-green-500/30"
+                        ? "bg-yellow-50 text-yellow-700 border-yellow-200" 
+                        : "bg-emerald-50 text-emerald-700 border-emerald-200"
                     }`}
                   >
                     {summary.urgencyLevel === "high" ? "🔴 Act Now" 
@@ -346,30 +359,38 @@ export default function Results() {
         {/* 5. PER-TOOL BREAKDOWN */}
         {!isOptimal && results.length > 0 && (
           <section className="space-y-4">
-            <h2 className="text-2xl font-bold mb-4">Per-Tool Breakdown</h2>
+            <h2 className="text-2xl font-bold mb-4 text-stone-900">Per-Tool Breakdown</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {results.map((result, idx) => {
-                let badgeClass = "bg-green-900/50 text-green-400 border-green-500/30";
+                let badgeClass = "bg-emerald-50 text-emerald-700 border-emerald-200";
                 let badgeText = "Optimized";
                 if (result.status === "overspending") {
-                  badgeClass = "bg-red-900/50 text-red-400 border-red-500/30";
+                  badgeClass = "bg-red-50 text-red-700 border-red-200";
                   badgeText = "Overspending";
                 } else if (result.status === "review") {
-                  badgeClass = "bg-yellow-900/50 text-yellow-400 border-yellow-500/30";
+                  badgeClass = "bg-yellow-50 text-yellow-700 border-yellow-200";
                   badgeText = "Review";
                 }
 
                 return (
                   <div
                     key={idx}
-                    className="bg-[#1e293b] border border-slate-700 rounded-xl p-6 flex flex-col h-full shadow-sm"
+                    className="bg-white border border-wheat-200 rounded-xl p-6 flex flex-col h-full shadow-sm"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex items-center gap-2">
-                        <span className="text-2xl" aria-hidden="true">
-                          {getToolIcon(result.tool)}
-                        </span>
-                        <h3 className="text-xl font-bold">{result.tool}</h3>
+                        {getToolIcon(result.tool) ? (
+                          <img 
+                            src={getToolIcon(result.tool)} 
+                            alt={result.tool} 
+                            className="w-8 h-8 object-contain"
+                          />
+                        ) : (
+                          <span className="text-2xl" aria-hidden="true">
+                            🔧
+                          </span>
+                        )}
+                        <h3 className="text-xl font-bold text-stone-900">{result.tool}</h3>
                       </div>
                       <span
                         className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${badgeClass}`}
@@ -379,30 +400,30 @@ export default function Results() {
                     </div>
 
                     <div className="mb-4 flex items-center gap-3 text-sm font-medium">
-                      <span className="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg">
+                      <span className="bg-wheat-100 text-stone-700 px-3 py-1.5 rounded-lg border border-wheat-200">
                         {result.currentPlan}
                       </span>
-                      <span className="text-slate-500">→</span>
-                      <span className="bg-blue-900/40 text-blue-300 px-3 py-1.5 rounded-lg">
+                      <span className="text-stone-400">→</span>
+                      <span className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg border border-blue-200">
                         {result.recommendedPlan}
                       </span>
                     </div>
 
                     <div className="flex flex-col gap-1 mb-4 text-sm">
-                      <p className="text-slate-400">
-                        Current: <span className="text-slate-200">${result.currentSpend}/mo</span>
+                      <p className="text-stone-500">
+                        Current: <span className="text-stone-800 font-medium">${result.currentSpend}/mo</span>
                       </p>
-                      <p className="text-slate-400">
-                        Recommended: <span className="text-slate-200">${result.recommendedSpend}/mo</span>
+                      <p className="text-stone-500">
+                        Recommended: <span className="text-stone-800 font-medium">${result.recommendedSpend}/mo</span>
                       </p>
                       {result.monthlySavings > 0 && (
-                        <p className="text-green-400 font-medium mt-1">
+                        <p className="text-emerald-600 font-medium mt-1">
                           ${result.monthlySavings}/mo saved
                         </p>
                       )}
                     </div>
 
-                    <p className="text-xs text-slate-400 mt-auto pt-4 border-t border-slate-700/50">
+                    <p className="text-xs text-stone-500 mt-auto pt-4 border-t border-wheat-100">
                       {result.reason}
                     </p>
                   </div>
@@ -414,16 +435,16 @@ export default function Results() {
 
         {/* 6. ALTERNATIVES SECTION */}
         {alternatives && alternatives.length > 0 && (
-          <section className="bg-[#1e293b] border border-slate-700 rounded-xl p-6 shadow-md">
-            <h2 className="text-xl font-bold mb-4 text-white">Additional Optimizations</h2>
+          <section className="bg-white border border-wheat-200 rounded-xl p-6 shadow-sm">
+            <h2 className="text-xl font-bold mb-4 text-stone-900">Additional Optimizations</h2>
             <div className="space-y-3">
               {alternatives.map((alt, idx) => (
                 <div
                   key={idx}
-                  className="bg-blue-900/20 border border-blue-500/20 p-4 rounded-lg flex items-start gap-3"
+                  className="bg-wheat-50 border border-wheat-200 p-4 rounded-lg flex items-start gap-3"
                 >
-                  <span className="text-blue-400 mt-0.5">💡</span>
-                  <p className="text-slate-300 text-sm leading-relaxed">{alt}</p>
+                  <span className="text-wheat-600 mt-0.5">💡</span>
+                  <p className="text-stone-700 text-sm leading-relaxed">{alt}</p>
                 </div>
               ))}
             </div>
@@ -432,52 +453,52 @@ export default function Results() {
 
         {/* 7. YOU'RE SPENDING WELL */}
         {isOptimal && (
-          <section className="bg-[#1e293b] border border-slate-700 rounded-xl p-6 text-center">
-            <h2 className="text-xl font-bold mb-2 text-white">
+          <section className="bg-white border border-wheat-200 rounded-xl p-6 text-center shadow-sm">
+            <h2 className="text-xl font-bold mb-2 text-stone-900">
               Your AI stack looks well optimized.
             </h2>
-            <p className="text-slate-400">
+            <p className="text-stone-500">
               We'll notify you when better options become available for your tools.
             </p>
           </section>
         )}
 
-        <hr className="border-slate-800" />
+        <hr className="border-wheat-300" />
 
         {/* 8. LEAD CAPTURE SECTION (Hidden for Public Share Version) */}
         {!isPublicShare && (
-          <section className="bg-[#1e293b] border border-slate-700 rounded-xl p-6 shadow-md">
-            <h2 className="text-xl font-bold mb-6 text-white">{leadTitle}</h2>
+          <section className="bg-white border border-wheat-200 rounded-xl p-6 shadow-sm">
+            <h2 className="text-xl font-bold mb-6 text-stone-900">{leadTitle}</h2>
 
             {leadSubmitted ? (
-              <div className="bg-green-900/30 border border-green-500/50 rounded-lg p-4 text-green-400 text-center font-medium">
+              <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 text-emerald-700 text-center font-medium">
                 ✅ Report sent! Check your inbox.
               </div>
             ) : (
               <form onSubmit={handleLeadSubmit} className="space-y-4 max-w-lg">
                 {leadError && (
-                  <div className="text-red-400 text-sm bg-red-900/20 p-3 rounded border border-red-500/20">
+                  <div className="text-red-700 text-sm bg-red-50 p-3 rounded border border-red-200">
                     {leadError}
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-1">
-                    Email <span className="text-red-400">*</span>
+                  <label className="block text-sm font-medium text-stone-700 mb-1">
+                    Email <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
                     required
                     value={leadForm.email}
                     onChange={(e) => setLeadForm({ ...leadForm, email: e.target.value })}
-                    className="w-full bg-[#0f172a] border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                    className="w-full bg-wheat-50 border border-wheat-300 rounded-lg px-4 py-2 text-stone-900 focus:outline-none focus:border-wheat-500 focus:ring-1 focus:ring-wheat-500 transition"
                     placeholder="you@company.com"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-400 mb-1">
+                    <label className="block text-sm font-medium text-stone-700 mb-1">
                       Company Name
                     </label>
                     <input
@@ -486,18 +507,18 @@ export default function Results() {
                       onChange={(e) =>
                         setLeadForm({ ...leadForm, companyName: e.target.value })
                       }
-                      className="w-full bg-[#0f172a] border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                      className="w-full bg-wheat-50 border border-wheat-300 rounded-lg px-4 py-2 text-stone-900 focus:outline-none focus:border-wheat-500 focus:ring-1 focus:ring-wheat-500 transition"
                       placeholder="Acme Corp"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-400 mb-1">
+                    <label className="block text-sm font-medium text-stone-700 mb-1">
                       Role
                     </label>
                     <select
                       value={leadForm.role}
                       onChange={(e) => setLeadForm({ ...leadForm, role: e.target.value })}
-                      className="w-full bg-[#0f172a] border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition appearance-none"
+                      className="w-full bg-wheat-50 border border-wheat-300 rounded-lg px-4 py-2 text-stone-900 focus:outline-none focus:border-wheat-500 focus:ring-1 focus:ring-wheat-500 transition appearance-none"
                     >
                       <option value="">Select a role...</option>
                       <option value="Founder">Founder</option>
@@ -508,7 +529,7 @@ export default function Results() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-400 mb-1">
+                    <label className="block text-sm font-medium text-stone-700 mb-1">
                       Team Size
                     </label>
                     <input
@@ -518,7 +539,7 @@ export default function Results() {
                       onChange={(e) =>
                         setLeadForm({ ...leadForm, teamSize: e.target.value })
                       }
-                      className="w-full bg-[#0f172a] border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition"
+                      className="w-full bg-wheat-50 border border-wheat-300 rounded-lg px-4 py-2 text-stone-900 focus:outline-none focus:border-wheat-500 focus:ring-1 focus:ring-wheat-500 transition"
                       placeholder="e.g. 10"
                     />
                   </div>
@@ -535,9 +556,9 @@ export default function Results() {
                         interestedInConsultation: e.target.checked,
                       })
                     }
-                    className="mt-1 w-4 h-4 rounded border-slate-700 text-blue-600 focus:ring-blue-500 focus:ring-offset-slate-900 bg-[#0f172a]"
+                    className="mt-1 w-4 h-4 rounded border-wheat-300 text-wheat-600 focus:ring-wheat-500 focus:ring-offset-white bg-wheat-50"
                   />
-                  <label htmlFor="consultation" className="text-sm text-slate-300">
+                  <label htmlFor="consultation" className="text-sm text-stone-600">
                     I'm interested in a Credex consultation to discuss enterprise AI
                     discounts and optimizations.
                   </label>
@@ -546,7 +567,7 @@ export default function Results() {
                 <button
                   type="submit"
                   disabled={leadSubmitting}
-                  className="mt-6 w-full md:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition rounded-lg font-medium text-white"
+                  className="mt-6 w-full md:w-auto px-6 py-2.5 bg-wheat-800 hover:bg-wheat-700 disabled:opacity-50 disabled:cursor-not-allowed transition rounded-lg font-medium text-white shadow-sm"
                 >
                   {leadSubmitting ? "Sending..." : "Get My Report"}
                 </button>
@@ -556,16 +577,16 @@ export default function Results() {
         )}
 
         {/* 9. SHARE SECTION */}
-        <section className="bg-[#1e293b] border border-slate-700 rounded-xl p-6 shadow-md text-center md:text-left">
-          <h2 className="text-xl font-bold mb-4 text-white">Share this audit</h2>
+        <section className="bg-white border border-wheat-200 rounded-xl p-6 shadow-sm text-center md:text-left">
+          <h2 className="text-xl font-bold mb-4 text-stone-900">Share this audit</h2>
           <div className="flex flex-col md:flex-row items-center gap-4">
-            <div className="flex w-full md:w-auto flex-1 items-center bg-[#0f172a] border border-slate-700 rounded-lg overflow-hidden">
-              <div className="px-4 py-2 text-slate-400 text-sm truncate flex-1 select-all">
+            <div className="flex w-full md:w-auto flex-1 items-center bg-wheat-50 border border-wheat-200 rounded-lg overflow-hidden">
+              <div className="px-4 py-2 text-stone-600 text-sm truncate flex-1 select-all">
                 {window.location.origin}/audit/{data.auditId}
               </div>
               <button
                 onClick={handleCopy}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 transition text-sm font-medium border-l border-slate-700 shrink-0 min-w-[90px]"
+                className="px-4 py-2 bg-wheat-200 hover:bg-wheat-300 text-wheat-900 transition text-sm font-medium border-l border-wheat-300 shrink-0 min-w-[90px]"
               >
                 {copied ? "Copied!" : "Copy"}
               </button>
@@ -576,7 +597,7 @@ export default function Results() {
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full md:w-auto shrink-0 bg-[#1DA1F2] hover:bg-[#1a8cd8] text-white px-5 py-2.5 rounded-lg transition font-medium text-sm flex items-center justify-center gap-2"
+              className="w-full md:w-auto shrink-0 bg-[#1DA1F2] hover:bg-[#1a8cd8] text-white px-5 py-2.5 rounded-lg transition font-medium text-sm flex items-center justify-center gap-2 shadow-sm"
             >
               <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                 <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />

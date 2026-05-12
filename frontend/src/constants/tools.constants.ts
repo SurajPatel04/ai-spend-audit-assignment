@@ -1,9 +1,17 @@
 import type { ToolId, ToolConfig } from "../types/audit.types";
 
+import cursorImg from "../assets/new-cursor.webp";
+import copilotImg from "../assets/github-copilot.webp";
+import claudeImg from "../assets/Claude_AI_symbol.svg.png";
+import chatgptImg from "../assets/ChatGPT-Logo.png";
+import anthropicApiImg from "../assets/anthropic-icon-.webp";
+import geminiImg from "../assets/Google-Gemini.png";
+import windsurfImg from "../assets/Windsurf.png";
+
 export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
   cursor: {
     label: "Cursor",
-    icon: "⚡",
+    icon: cursorImg,
     description: "AI-powered code editor with intelligent autocomplete and chat.",
     plans: [
       { key: "hobby", label: "Hobby", pricePerSeat: 0 },
@@ -16,7 +24,7 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
   },
   githubCopilot: {
     label: "GitHub Copilot",
-    icon: "🐙",
+    icon: copilotImg,
     description: "AI pair programmer that suggests code inline in your IDE.",
     plans: [
       { key: "free", label: "Free", pricePerSeat: 0 },
@@ -28,7 +36,7 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
   },
   claude: {
     label: "Claude (Anthropic)",
-    icon: "🧠",
+    icon: claudeImg,
     description: "Conversational AI assistant excelling at analysis and writing.",
     plans: [
       { key: "free", label: "Free", pricePerSeat: 0 },
@@ -42,7 +50,7 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
   },
   chatgpt: {
     label: "ChatGPT (OpenAI)",
-    icon: "💬",
+    icon: chatgptImg,
     description: "General-purpose AI chatbot for conversation and content generation.",
     plans: [
       { key: "free", label: "Free", pricePerSeat: 0 },
@@ -57,7 +65,7 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
   },
   anthropicApi: {
     label: "Anthropic API (Direct)",
-    icon: "🔌",
+    icon: anthropicApiImg,
     description: "Direct API access to Claude models for custom integrations.",
     plans: [
       { key: "haiku_45", label: "Claude 3.5 Haiku", pricePerSeat: null },
@@ -67,7 +75,7 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
   },
   openaiApi: {
     label: "OpenAI API (Direct)",
-    icon: "🔑",
+    icon: chatgptImg,
     description: "Direct API access to GPT models for programmatic usage.",
     plans: [
       { key: "gpt5_mini", label: "GPT-4o mini", pricePerSeat: null },
@@ -77,7 +85,7 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
   },
   gemini: {
     label: "Gemini (Google)",
-    icon: "✨",
+    icon: geminiImg,
     description: "Google's multimodal AI model for text, code, and image tasks.",
     plans: [
       { key: "free", label: "Free", pricePerSeat: 0 },
@@ -89,7 +97,7 @@ export const TOOLS_CONFIG: Record<ToolId, ToolConfig> = {
   },
   windsurf: {
     label: "Windsurf",
-    icon: "🏄",
+    icon: windsurfImg,
     description: "AI-assisted coding environment with autonomous agent workflows.",
     plans: [
       { key: "free", label: "Free", pricePerSeat: 0 },
