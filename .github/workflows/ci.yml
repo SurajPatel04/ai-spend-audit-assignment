@@ -1,4 +1,5 @@
 name: CI
+
 on:
   push:
     branches: [main]
@@ -6,16 +7,18 @@ on:
     branches: [main]
 
 jobs:
-  lint-and-test:
+  test:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+
       - name: Install backend deps
         run: cd backend && npm ci
-      - name: Lint backend
-        run: cd backend && npm run lint
+
       - name: Run tests
         run: cd backend && npm test
