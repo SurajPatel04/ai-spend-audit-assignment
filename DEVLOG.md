@@ -166,11 +166,48 @@ Also learned that LangChain's withStructuredOutput + Zod is cleaner than parsing
 **Blockers / what I'm stuck on:**
 OG meta tags in a Vite + React SPA are not crawlable by social platforms since crawlers don't execute JavaScript. Documented this limitation — proper fix would require SSR (Next.js). Used react-helmet-async as a best-effort solution for now.
 
+## Day 6 — 2026-05-12
+
+**Hours worked:** 6
+
+**What I did:**
+
+Testing:
+- wrote 77 tests across 6 test files covering audit engine, savings calculator helpers, plan rules, alternative rules, all controllers, and API integration
+- fixed vi.mock class constructor error — ChatGoogleGenerativeAI mock needed to be a proper class, not an arrow function, because `new` requires a constructor
+- added supertest integration tests for all API routes with fully mocked dependencies
+- set up vitest.config.ts
+- all 77 tests passing
+
+CI/CD:
+- created .github/workflows/ci.yml — runs lint + tests on every push to main
+- confirmed green checkmark on GitHub Actions
+
+Documentation:
+- wrote ARCHITECTURE.md with full Mermaid system diagram, data flow, stack reasoning, and 10k scale answer
+- wrote TESTS.md documenting all 77 tests across 6 files with descriptions
+- wrote PROMPTS.md with full Gemini prompt, structured output reasoning, and what failed (raw LLM math, vague tone constraints, markdown string parsing)
+- wrote GTM.md, ECONOMICS.md, LANDING_COPY.md, METRICS.md
+
+Frontend:
+- updated SpendForm, ToolCard, TeamMetaSection components
+- updated tools constants and styling
+- added tool logo assets (Cursor, Claude, ChatGPT, Gemini, Windsurf, GitHub Copilot, Anthropic)
+
+**What I learned:**
+vi.mock factory functions must return a class when the module is instantiated with `new`. Arrow functions don't have a prototype and throw "is not a constructor" at runtime. Switching to a class definition inside the mock factory fixed it immediately.
+
+Also learned that the Resend free tier limitation (only delivers to verified account owner email) needs to be documented clearly — it's a known constraint for the demo, not a bug.
+
+**Blockers / what I'm stuck on:**
+Resend email only delivers to the Resend account owner email in development because domain verification is not set up. Documented this in ARCHITECTURE.md. Not blocking for submission — the email flow works correctly, just restricted to verified addresses.
+
 **Plan for tomorrow:**
-- Write 5+ audit engine tests with Jest/Vitest
-- Set up GitHub Actions CI (lint + test on every push to main)
-- Deploy backend to Render
-- Deploy frontend to Netlify
-- Fix CORS between deployed URLs
-- Conduct user interviews (target: 3 real conversations)
-- Start PRICING_DATA.md, ARCHITECTURE.md
+- Write REFLECTION.md (5 long answers)
+- Write README.md with screenshots from live deployed URL
+- Write PRICING_DATA.md — pull current prices from all vendor pages
+- Write USER_INTERVIEWS.md
+- Add Day 7 DEVLOG entry
+- Run Lighthouse audit on deployed URL, fix anything below threshold
+- Verify git log shows commits on 5+ distinct days
+- Final end-to-end test in incognito before submitting
