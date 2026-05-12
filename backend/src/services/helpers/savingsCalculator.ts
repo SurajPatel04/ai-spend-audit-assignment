@@ -1,6 +1,3 @@
-// backend/src/services/helpers/savingsCalculator.ts
-
-// calculate monthly savings
 export const calcMonthlySavings = (
     currentSpend: number,
     recommendedSpend: number
@@ -8,12 +5,10 @@ export const calcMonthlySavings = (
     return Math.max(0, currentSpend - recommendedSpend)
 }
 
-// calculate annual savings from monthly
 export const calcAnnualSavings = (monthlySavings: number): number => {
     return monthlySavings * 12
 }
 
-// calculate expected spend based on official price per seat
 export const calcExpectedSpend = (
     pricePerSeat: number,
     seats: number
@@ -21,7 +16,6 @@ export const calcExpectedSpend = (
     return pricePerSeat * seats
 }
 
-// calculate if user is overpaying vs official price
 export const calcOverpayAmount = (
     monthlySpend: number,
     officialPricePerSeat: number,
@@ -31,7 +25,6 @@ export const calcOverpayAmount = (
     return Math.max(0, monthlySpend - expected)
 }
 
-// calculate spend per developer
 export const calcSpendPerDev = (
     totalSpend: number,
     teamSize: number
@@ -40,7 +33,6 @@ export const calcSpendPerDev = (
     return parseFloat((totalSpend / teamSize).toFixed(2))
 }
 
-// calculate total spend across all enabled tools
 export const calcTotalSpend = (
     tools: { enabled: boolean; monthlySpend: number }[]
 ): number => {
@@ -49,7 +41,6 @@ export const calcTotalSpend = (
         .reduce((sum, t) => sum + t.monthlySpend, 0)
 }
 
-// determine savings level label
 export const getSavingsLevel = (
     monthlySavings: number
 ): 'high' | 'medium' | 'low' | 'optimal' => {
@@ -59,7 +50,6 @@ export const getSavingsLevel = (
     return 'optimal'
 }
 
-// determine audit status per tool
 export const getAuditStatus = (
     monthlySavings: number
 ): 'overspending' | 'review' | 'optimal' => {
@@ -68,7 +58,6 @@ export const getAuditStatus = (
     return 'optimal'
 }
 
-// format number as currency string
 export const formatCurrency = (amount: number): string => {
     return `$${amount.toLocaleString('en-US', {
         minimumFractionDigits: 0,
