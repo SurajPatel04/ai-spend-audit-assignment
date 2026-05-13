@@ -20,7 +20,7 @@ const allowedOrigins =
         ? ["https://ai-spend-audit-assignment.vercel.app"]
         : [
             'http://localhost:3000',
-            "https://ai-spend-audit-assignment.vercel.app"
+            "https://ai-spend-audit-assignment.vercel.app",
             'http://localhost:5173',
         ]
 
