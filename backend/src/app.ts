@@ -17,9 +17,10 @@ app.use(cookieParser())
 
 const allowedOrigins =
     env.nodeEnv === 'production'
-        ? []
+        ? ["https://ai-spend-audit-assignment.vercel.app"]
         : [
             'http://localhost:3000',
+            "https://ai-spend-audit-assignment.vercel.app"
             'http://localhost:5173',
         ]
 
