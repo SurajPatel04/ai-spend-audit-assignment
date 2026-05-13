@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuditPage } from "./pages/AuditPage";
 import Results from "./pages/Results";
 import { pingBackend } from "./services/api";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [isServerReady, setIsServerReady] = useState(false);
@@ -49,6 +51,7 @@ function App() {
           </Routes>
         </Router>
       </div>
+      <ToastContainer position="bottom-center" autoClose={3000} theme="light" hideProgressBar={true} />
     </>
   );
 }

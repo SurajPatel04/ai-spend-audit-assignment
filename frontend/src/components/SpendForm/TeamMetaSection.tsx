@@ -9,9 +9,9 @@ const USE_CASE_OPTIONS: { value: UseCaseType; label: string; icon: string }[] = 
 ];
 
 interface TeamMetaSectionProps {
-  teamSize: number;
+  teamSize: number | '';
   useCase: UseCaseType;
-  onTeamSizeChange: (size: number) => void;
+  onTeamSizeChange: (size: number | '') => void;
   onUseCaseChange: (useCase: UseCaseType) => void;
 }
 
@@ -41,8 +41,13 @@ export function TeamMetaSection({
           min={1}
           value={teamSize}
           onChange={(e) => {
-            const val = Math.max(1, parseInt(e.target.value, 10) || 1);
-            onTeamSizeChange(val);
+            const val = e.target.value;
+            if (val === '') {
+              onTeamSizeChange('');
+            } else {
+              const parsed = parseInt(val, 10);
+              if (!isNaN(parsed)) onTeamSizeChange(Math.max(1, parsed));
+            }
           }}
           className="w-full max-w-[200px] bg-wheat-50 border border-wheat-200 rounded-lg px-3 py-2 text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-wheat-400/40 transition-colors"
         />

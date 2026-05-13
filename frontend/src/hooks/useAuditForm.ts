@@ -39,7 +39,7 @@ export interface UseAuditFormReturn {
   formState: AuditFormState;
   toggleTool: (toolId: ToolId) => void;
   updateToolField: (toolId: ToolId, field: keyof ToolEntry, value: any) => void;
-  setTeamSize: (size: number) => void;
+  setTeamSize: (size: number | '') => void;
   setUseCase: (useCase: UseCaseType) => void;
   resetForm: () => void;
   computedMonthlyTotal: number;
@@ -90,8 +90,8 @@ export function useAuditForm(): UseAuditFormReturn {
     []
   );
 
-  const setTeamSize = useCallback((size: number): void => {
-    setFormState((prev) => ({ ...prev, teamSize: Math.max(1, size) }));
+  const setTeamSize = useCallback((size: number | ''): void => {
+    setFormState((prev) => ({ ...prev, teamSize: size === '' ? '' : Math.max(1, size) }));
   }, []);
 
   const setUseCase = useCallback((useCase: UseCaseType): void => {
@@ -106,7 +106,8 @@ export function useAuditForm(): UseAuditFormReturn {
   const computedMonthlyTotal = useMemo(() => {
     return TOOL_IDS.reduce((total, id) => {
       const entry = formState.tools[id];
-      return entry.enabled ? total + entry.monthlySpend : total;
+      const spend = entry.monthlySpend === '' ? 0 : entry.monthlySpend;
+      return entry.enabled ? total + spend : total;
     }, 0);
   }, [formState.tools]);
 

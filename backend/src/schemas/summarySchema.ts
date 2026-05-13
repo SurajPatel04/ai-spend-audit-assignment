@@ -11,9 +11,9 @@ export type AuditSummary = z.infer<typeof AuditSummarySchema>;
 // Input validation schema (what the controller receives)
 export const SummaryRequestSchema = z.object({
     auditId: z.string().uuid("Invalid audit ID"),
-    totalMonthlySpend: z.number().positive(),
+    totalMonthlySpend: z.number().min(0),
     totalSavings: z.number().min(0),
-    flaggedTools: z.array(z.string()).min(1),
+    flaggedTools: z.array(z.string()),
     useCase: z.enum(["coding", "writing", "data", "research", "mixed"]),
     teamSize: z.number().int().positive(),
 });

@@ -13,13 +13,13 @@ export type ToolId =
 export interface ToolEntry {
   enabled: boolean;
   plan: string;
-  seats: number;
-  monthlySpend: number;
+  seats: number | '';
+  monthlySpend: number | '';
 }
 
 export interface AuditFormState {
   tools: Record<ToolId, ToolEntry>;
-  teamSize: number;
+  teamSize: number | '';
   useCase: UseCaseType;
 }
 

@@ -27,13 +27,13 @@ export function ToolCard({ toolId, config, entry, onToggle, onFieldChange }: Too
   const isApiPlan = selectedPlan.pricePerSeat === null;
 
   const estimatedSpend = useMemo(() => {
-    if (selectedPlan.pricePerSeat === null) return null;
+    if (selectedPlan.pricePerSeat === null || entry.seats === '') return null;
     return selectedPlan.pricePerSeat * entry.seats;
   }, [selectedPlan.pricePerSeat, entry.seats]);
 
   const showSpendWarning = useMemo(() => {
-    if (estimatedSpend === null || estimatedSpend === 0) return false;
-    const diff = Math.abs(entry.monthlySpend - estimatedSpend);
+    if (estimatedSpend === null || estimatedSpend === 0 || entry.monthlySpend === '') return false;
+    const diff = Math.abs((entry.monthlySpend as number) - estimatedSpend);
     return diff / estimatedSpend > 0.2;
   }, [entry.monthlySpend, estimatedSpend]);
 
@@ -141,8 +141,13 @@ export function ToolCard({ toolId, config, entry, onToggle, onFieldChange }: Too
                   max={10000}
                   value={entry.seats}
                   onChange={(e) => {
-                    const val = Math.max(1, Math.min(10000, parseInt(e.target.value, 10) || 1));
-                    onFieldChange("seats", val);
+                    const val = e.target.value;
+                    if (val === '') {
+                      onFieldChange("seats", '');
+                    } else {
+                      const parsed = parseInt(val, 10);
+                      if (!isNaN(parsed)) onFieldChange("seats", Math.max(1, Math.min(10000, parsed)));
+                    }
                   }}
                   className="w-full bg-white border border-wheat-300 rounded-lg px-3 py-2 text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-wheat-400/40 transition-colors"
                 />
@@ -163,8 +168,13 @@ export function ToolCard({ toolId, config, entry, onToggle, onFieldChange }: Too
                   min={0}
                   value={entry.monthlySpend}
                   onChange={(e) => {
-                    const val = Math.max(0, parseFloat(e.target.value) || 0);
-                    onFieldChange("monthlySpend", val);
+                    const val = e.target.value;
+                    if (val === '') {
+                      onFieldChange("monthlySpend", '');
+                    } else {
+                      const parsed = parseFloat(val);
+                      if (!isNaN(parsed)) onFieldChange("monthlySpend", Math.max(0, parsed));
+                    }
                   }}
                   className="w-full bg-white border border-wheat-300 rounded-lg pl-7 pr-3 py-2 text-sm text-stone-900 focus:outline-none focus:ring-2 focus:ring-wheat-400/40 transition-colors"
                 />

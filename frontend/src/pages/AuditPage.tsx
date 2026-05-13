@@ -1,18 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import type { AuditFormState } from "../types/audit.types";
 import { SpendForm } from "../components/SpendForm";
 import { runAudit, type AuditFormData } from "../services/api";
 
 export function AuditPage() {
   const navigate = useNavigate();
-  const [toast, setToast] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!toast) return;
-    const timer = setTimeout(() => setToast(null), 3000);
-    return () => clearTimeout(timer);
-  }, [toast]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -21,36 +15,48 @@ export function AuditPage() {
       console.log("[AuditPage] Form submitted:", state);
     }
     
-    setIsSubmitting(true);
-    setToast("🔄 Generating audit...");
-    
-    try {
-      const enabledToolsCount = Object.values(state.tools).filter(t => t.enabled).length;
-      if (enabledToolsCount === 0) {
-        setToast("❌ Please select at least one AI tool");
+    const enabledToolsCount = Object.values(state.tools).filter(t => t.enabled).length;
+    if (enabledToolsCount === 0) {
+      toast.error("Please select at least one AI tool");
+      return;
+    }
+
+    if (state.teamSize === '') {
+      toast.error("Total team size cannot be empty");
+      return;
+    }
+
+    const tools = Object.entries(state.tools)
+      .filter(([_, entry]) => entry.enabled)
+      .map(([name, entry]) => ({
+        name,
+        enabled: entry.enabled,
+        plan: entry.plan,
+        seats: entry.seats,
+        monthlySpend: entry.monthlySpend
+      }));
+      
+    for (const tool of tools) {
+      if (tool.seats === '' || tool.monthlySpend === '') {
+        toast.error(`Please fill out all fields for the enabled tools`);
         return;
       }
+    }
 
-      const tools = Object.entries(state.tools)
-        .filter(([_, entry]) => entry.enabled)
-        .map(([name, entry]) => ({
-          name,
-          enabled: entry.enabled,
-          plan: entry.plan,
-          seats: entry.seats,
-          monthlySpend: entry.monthlySpend
-        }));
-      
+    setIsSubmitting(true);
+    const loadingToastId = toast.loading("Generating audit...");
+    
+    try {
       const payload: AuditFormData = {
-        tools,
-        teamSize: state.teamSize,
+        tools: tools as any,
+        teamSize: state.teamSize as number,
         useCase: state.useCase
       };
 
       const result = await runAudit(payload);
       
       console.log("✅ Audit Result:", result);
-      setToast("✅ Audit complete! Redirecting...");
+      toast.update(loadingToastId, { render: "Audit complete! Redirecting...", type: "success", isLoading: false, autoClose: 2000 });
       
       localStorage.setItem("auditId", result.auditId);
       localStorage.setItem("auditData", JSON.stringify(result));
@@ -58,7 +64,7 @@ export function AuditPage() {
       
     } catch (error) {
       console.error("Audit error:", error);
-      setToast("❌ Something went wrong. Please try again.");
+      toast.update(loadingToastId, { render: "Something went wrong. Please try again.", type: "error", isLoading: false, autoClose: 3000 });
     } finally {
       setIsSubmitting(false);
     }
@@ -74,17 +80,6 @@ export function AuditPage() {
       <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <SpendForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
       </main>
-
-      {toast && (
-        <div
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-[slideUp_0.3s_ease-out]"
-          role="alert"
-        >
-          <div className="bg-wheat-100/90 backdrop-blur-xl border border-wheat-300 text-wheat-900 px-6 py-3 rounded-xl text-sm font-medium shadow-lg shadow-wheat-500/10">
-            {toast}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
