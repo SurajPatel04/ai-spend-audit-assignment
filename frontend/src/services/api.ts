@@ -137,3 +137,12 @@ export const generateAuditSummary = async (auditData: SummaryRequest) => {
   
   return result;
 };
+
+export const pingBackend = async (): Promise<boolean> => {
+  try {
+    const response = await fetch(`${API_URL}/`);
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+};
